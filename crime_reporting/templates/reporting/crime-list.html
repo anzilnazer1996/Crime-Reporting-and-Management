@@ -1,0 +1,70 @@
+{%extends 'base.html'%}
+{% block section%}
+<div class="container">
+  <div class="page-inner">
+    <div
+      class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+    >
+      <div>
+        <h3 class="fw-bold mb-3">Crime Reports List</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          {% if user.role == 'User' %}
+            <div class="card-header">
+                <div class="d-flex align-items-center justify-content-end">
+                  <a href="{%url 'crime-register'%}"
+                    class="btn btn-round ms-auto btn-primary"
+                  >
+                   Report Crime
+                  </a>
+                </div>
+            </div>
+            {% endif %} 
+          <div class="card-body">
+            <div class="table-responsive">
+              <table
+                id="add-row"
+                class="display table table-striped table-hover"
+              >
+                <thead>
+                  <tr>
+                    <th>Location</th>
+                    <th>Type of Crime</th>
+                    <th>Date of Report</th>
+                    <th>status</th>
+                    <th style="width: 10%">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for crime in crimes%}
+                  <tr>
+                    <td>{{crime.location}}</td>
+                    <td>{{crime.type_of_crime}}</td>
+                    <td>{{crime.created_at}}</td>
+                    <td>{{crime.status}}</td>
+                    <td>
+                      <div class="form-button-action">
+                        <a
+                          href="{%url 'crime-details' crime.uuid%}"
+                          class="btn btn-link btn-primary btn-lg"
+                        >
+                          <i class="fa fa-eye"></i>
+                        </a>
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock%}

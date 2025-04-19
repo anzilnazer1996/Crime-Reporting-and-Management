@@ -1,0 +1,29 @@
+<html lang="en">
+<head>
+ <style>
+    @media screen and (max-width: 480px){
+        .card{
+            max-width: 400px;
+            
+        }
+    }
+ </style>   
+</head>
+<body>
+    <div style="background-size:cover; height: 500px;">
+            <div class="card" style="width: 600px; margin: 0px auto; padding: 20px; background-color: white; border: 1px solid #e7e9eb; border-radius: 2%;">
+                <h4>Dear {{crime.user.first_name}} {{crime.user.last_name}},</h4>
+                <p>We are writing to inform you that the crime report you submitted regarding {{crime.type_of_crime}},</p>
+                <p>reported on {{crime.created_at}} at {{crime.location}}, has been reviewed and {{status}}</p>
+
+                <p>Your case is now officially recorded and has been forwarded to the appropriate authorities for further action. If any additional information is required, you may be contacted by an investigating officer.</p>
+                    
+                <p>If you have any questions or need support, please do not hesitate to reach out to us.</p>
+                    
+                <p>Thank you for taking the step to report this matter.</p>
+
+              </div>
+       
+    </div>   
+</body>
+</html>

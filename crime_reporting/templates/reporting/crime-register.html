@@ -1,0 +1,65 @@
+{%extends 'base.html'%}
+{% block section%}
+<div class="container">
+  <div class="page-inner">
+    <div
+      class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+    >
+      <div>
+        <h3 class="fw-bold mb-3">Report Crime</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card"> 
+          <div class="card-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {%csrf_token%}
+                <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label class="form-label">Location<span class="text-danger">*</span></label>
+                        {{form.location}}
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label class="form-label">Type of Crime<span class="text-danger">*</span></label>
+                        {{form.type_of_crime}}
+                      </div>
+                    </div>
+                  </div> 
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label class="form-label">Description<span class="text-danger">*</span></label>
+                        {{form.description}}
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group mb-3">
+                        <label class="form-label">Evidence 1<span class="text-danger">*</span></label>
+                        {{form.evidence_1}}
+                      </div>
+                      <div class="form-group mb-3">
+                        <label class="form-label">Evidence 2</label>
+                        {{form.evidence_2}}
+                      </div>
+                      <div class="form-group mb-3">
+                        <label class="form-label">Evidence 3</label>
+                        {{form.evidence_3}}
+                      </div>
+                    </div>
+                  </div> 
+                  <div class="d-flex mt-3 align-items-center justify-content-center ">
+                    <button type="submit" class="btn btn-primary">Report Crime</button>
+                  </div>    
+            </form>    
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock%}

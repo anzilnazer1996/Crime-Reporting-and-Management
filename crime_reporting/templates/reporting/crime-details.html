@@ -1,0 +1,125 @@
+{%extends 'base.html'%} {% block section%}
+<div class="container">
+  <div class="page-inner">
+    <div
+      class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4"
+    >
+      <div>
+        <h3 class="fw-bold mb-3">Crime Details</h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="d-flex align-items-center justify-content-end">
+              {% if user.role == 'User' %}
+              <button
+                class="btn btn-round ms-auto {% if crime.status == 'Approve' %} btn-success {% elif crime.status == 'Pending' %} btn-warning {% elif crime.status == 'Reject' %} btn-danger {% endif %}"
+              >
+              {% if crime.status == 'Approve' %}
+                Approved
+                {% elif crime.status == 'Pending' %} 
+                Pending
+                {% elif crime.status == 'Reject' %}
+                Rejected
+                {% endif %}  
+              </button>
+              {% elif user.role == 'Admin' %}
+              <form class="ms-3" action="{% url 'crime-details' crime.uuid %}" method="post">
+                {% csrf_token %}
+                <div class="d-flex align-items-center">
+                  <span class="me-2 fw-semibold text-secondary">Police Officer:</span>
+                  <select
+                    class="form-select form-select-sm w-auto"
+                    aria-label="Select Status"
+                    name="status"
+                    onchange="this.form.submit();"
+                  >
+                    <option disabled {% if not crime.status %}selected{% endif %}>Choose status</option>
+                    <option value="Approve" {% if crime.status == "Approve" %}selected{% endif %}>Approve</option>
+                    <option value="Pending" {% if crime.status == "Pending" %}selected{% endif %}>Pending</option>
+                    <option value="Reject" {% if crime.status == "Reject" %}selected{% endif %}>Reject</option>
+                  </select>
+                </div>
+              </form>              
+              <form class="ms-3" action="{% url 'crime-details' crime.uuid %}" method="post">
+                {% csrf_token %}
+                <div class="d-flex align-items-center">
+                  <span class="me-2 fw-semibold text-secondary">Status:</span>
+                  <select
+                    class="form-select form-select-sm w-auto"
+                    aria-label="Select Status"
+                    name="status"
+                    onchange="this.form.submit();"
+                  >
+                    <option disabled {% if not crime.status %}selected{% endif %}>Choose status</option>
+                    <option value="Approve" {% if crime.status == "Approve" %}selected{% endif %}>Approve</option>
+                    <option value="Pending" {% if crime.status == "Pending" %}selected{% endif %}>Pending</option>
+                    <option value="Reject" {% if crime.status == "Reject" %}selected{% endif %}>Reject</option>
+                  </select>
+                </div>
+              </form>              
+              {% endif %}
+            </div>
+          </div>
+          <div class="card-body">
+            <!-- Styled Crime Detail Section -->
+            <div class="p-3 border rounded bg-light">
+              <div class="mb-3">
+                <h6 class="text-secondary fw-semibold mb-1">Location</h6>
+                <p class="mb-0">{{ crime.location }}</p>
+              </div>
+
+              <div class="mb-3">
+                <h6 class="text-secondary fw-semibold mb-1">Type of Crime</h6>
+                <span class="badge bg-warning text-dark"
+                  >{{ crime.type_of_crime }}</span
+                >
+              </div>
+
+              <div class="mb-3">
+                <h6 class="text-secondary fw-semibold mb-1">Description</h6>
+                <p class="mb-0">{{ crime.description }}</p>
+              </div>
+
+              <div class="mb-3">
+                <h6 class="text-secondary fw-semibold mb-1">Reported At</h6>
+                <p class="mb-0">{{ crime.created_at }}</p>
+              </div>
+
+              <div class="mb-3">
+                <h6 class="text-secondary fw-semibold mb-1">Evidences</h6>
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    <a href="{{ crime.evidence_1.url }}" target="_blank">
+                      <i class="fa fa-paperclip me-1"></i>
+                      {{crime.evidence_1.name }}
+                    </a>
+                  </li>
+                  {% if crime.evidence_2%}
+                  <li class="list-group-item">
+                    <a href="{{ crime.evidence_2.url }}" target="_blank">
+                      <i class="fa fa-paperclip me-1"></i>
+                      {{crime.evidence_2.name }}
+                    </a>
+                  </li>
+                  {% endif%} {% if crime.evidence_3%}
+                  <li class="list-group-item">
+                    <a href="{{ crime.evidence_3.url }}" target="_blank">
+                      <i class="fa fa-paperclip me-1"></i>
+                      {{crime.evidence_3.name }}
+                    </a>
+                  </li>
+                  {% endif%}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock%}
