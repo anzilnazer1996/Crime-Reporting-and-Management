@@ -61,7 +61,7 @@ class CrimeReports(BaseClass):
 
     status = models.CharField(max_length=15,choices=StatusChoices.choices,default=StatusChoices.PENDING)
 
-    p_officer = models.ForeignKey('authentication.Profile',on_delete=models.CASCADE,related_name='police')
+    p_officer = models.ForeignKey('authentication.Profile',on_delete=models.CASCADE,related_name='police',null=True)
 
     p_status = models.CharField(max_length=25,choices=PoliceStatusChoices.choices,default=PoliceStatusChoices.UNDER_INVESTIGATION)
 
