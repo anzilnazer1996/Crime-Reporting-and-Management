@@ -8,7 +8,7 @@ class CrimeRegisterForm(forms.ModelForm):
 
         model = CrimeReports 
 
-        exclude =['uuid','active_status','user','status']
+        exclude =['uuid','active_status','user','status','p_officer','p_status']
 
         widgets = {
 
