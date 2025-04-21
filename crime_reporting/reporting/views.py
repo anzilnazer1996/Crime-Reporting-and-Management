@@ -7,6 +7,8 @@ from django.views import View
 
 from .models import CrimeReports
 
+from authentication.models import Profile
+
 import threading
 
 from .forms import CrimeRegisterForm
@@ -47,6 +49,14 @@ class CrimeListView(View):
             
                 crimes = CrimeReports.objects.filter(Q(user__first_name__icontains=query)|Q(user__last_name__icontains=query)|Q(location__icontains=query)|Q(description__icontains=query)|Q(type_of_crime__icontains=query))
 
+        elif request.user.role == 'Police':
+
+            crimes = CrimeReports.objects.filter(p_officer=request.user).order_by('-id')
+
+            if query:
+            
+                crimes = CrimeReports.objects.filter(Q(p_officer=request.user)&(Q(location__icontains=query)|Q(description__icontains=query)|Q(type_of_crime__icontains=query)))        
+
         return render(request,'reporting/crime-list.html',context={'crimes':crimes,'query':query})
 
 class CrimeDetailsView(View):
@@ -55,10 +65,11 @@ class CrimeDetailsView(View):
 
         uuid = kwargs.get('uuid')
 
-        crime = CrimeReports.objects.get(user=request.user,uuid=uuid)
+        crime = CrimeReports.objects.get(uuid=uuid)
 
-        return render(request,'reporting/crime-details.html',context={'crime':crime})
+        police_officers = Profile.objects.filter(role='Police')
 
+        return render(request,'reporting/crime-details.html',context={'crime':crime,'police_officers':police_officers})
     def post(self,request,*args,**kwargs):
 
         uuid = kwargs.get('uuid')
@@ -66,6 +77,49 @@ class CrimeDetailsView(View):
         crime = CrimeReports.objects.get(uuid=uuid)
 
         status = request.POST.get('status')
+
+        p_officer_id = request.POST.get('p_officer_id')
+
+        p_status = request.POST.get('p_status')
+
+        if p_status:
+
+            crime.p_status = p_status
+
+            crime.save()
+
+            title = 'Investigation Status Updated'
+       
+
+            message = f'Crime Report is {p_status}'
+
+            data = {
+                    'title': title,
+                    'message': message
+                    }
+            messages.add_message(request, messages.INFO, json.dumps(data), extra_tags='json')
+
+            recepient = crime.user.email
+            template ='email/investigation-status.html'
+            subject = 'Crime Report investigation Status'
+            context = {'status':p_status,'crime':crime}
+            # sending email
+            thread = threading.Thread(target=send_email,args=(subject,recepient,template,context))
+
+            thread.start()
+
+            return redirect('crime-details',uuid=crime.uuid)
+
+
+        if p_officer_id:
+
+            p_officer = Profile.objects.get(id=int(p_officer_id))
+
+            crime.p_officer = p_officer
+
+            crime.save()
+
+            return redirect('crime-details',uuid=crime.uuid)
 
         if status:
 

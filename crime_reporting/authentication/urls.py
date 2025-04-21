@@ -10,4 +10,6 @@ urlpatterns = [
 
     path('register/',views.RegisterView.as_view(),name='register'),
 
+    path('register-admin-police/',views.RegisterAdminOrPoliceView.as_view(),name='register-admin-police'),
+
 ]

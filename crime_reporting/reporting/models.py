@@ -34,6 +34,15 @@ class StatusChoices(models.TextChoices):
 
     REJECTED = 'Reject','Reject'
 
+class PoliceStatusChoices(models.TextChoices):
+
+    UNDER_INVESTIGATION = 'Under Investigation','Under Investigation'
+
+    SOLVED = 'Solved','Solved'
+
+    CLOSED = 'Closed','Closed'
+    
+
 class CrimeReports(BaseClass):
 
     user = models.ForeignKey('authentication.Profile',on_delete=models.CASCADE)
@@ -51,6 +60,10 @@ class CrimeReports(BaseClass):
     evidence_3 = models.FileField(upload_to='evidences/',null=True,blank=True)
 
     status = models.CharField(max_length=15,choices=StatusChoices.choices,default=StatusChoices.PENDING)
+
+    p_officer = models.ForeignKey('authentication.Profile',on_delete=models.CASCADE,related_name='police')
+
+    p_status = models.CharField(max_length=25,choices=PoliceStatusChoices.choices,default=PoliceStatusChoices.UNDER_INVESTIGATION)
 
     def __str__(self):
 

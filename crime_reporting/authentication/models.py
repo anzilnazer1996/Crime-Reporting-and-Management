@@ -31,6 +31,8 @@ class RoleChoices(models.TextChoices):
 
     ADMIN = 'Admin','Admin'
 
+    POLICE = 'Police','Police'
+
 class Profile(AbstractUser):
 
     photo = models.FileField(upload_to='profile pictures/')

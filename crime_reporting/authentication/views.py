@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 
 from django.views import View
 
-from .forms import LoginForm,RegisterForm
+from .forms import LoginForm,RegisterForm,RegisterAdminorPoliceForm
 
 from django.contrib.auth import authenticate,logout,login
 
@@ -42,11 +42,7 @@ class LoginView(View):
 
                 role = user.role
 
-                if role in ['Admin']:
-
-                    redirect_url ='dashboard'
-                
-                elif role in ['User']:
+                if role in ['Admin','User','Police']:
 
                     redirect_url ='dashboard'
 
@@ -93,6 +89,37 @@ class RegisterView(View):
             validated_data['username']=validated_data['email']
 
             validated_data['role']='User'
+
+            Profile.objects.create_user(**validated_data)
+
+            return redirect('login')
+        
+        data = {'form':form}
+
+        print(form.errors)
+
+        return render(request,'authentication/register.html',context=data)
+
+
+class RegisterAdminOrPoliceView(View):
+
+    def get(self,request,*args,**kwargs):
+
+        form = RegisterAdminorPoliceForm()
+
+        data = {'form':form}
+
+        return render(request,'authentication/register-admin-police.html',context=data)
+ 
+    def post(self,request,*args,**kwargs):
+
+        form = RegisterAdminorPoliceForm(request.POST,request.FILES)
+
+        if form.is_valid():
+
+            validated_data = form.cleaned_data.copy()
+
+            validated_data['username']=validated_data['email']
 
             Profile.objects.create_user(**validated_data)
 
